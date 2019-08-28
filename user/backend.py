@@ -43,10 +43,10 @@ class JWTAuthentication(authentication.BaseAuthentication):
         successful, return the user and token. If not, throw an error.
         """
         try:
-            pdb.set_trace()            
+            # pdb.set_trace()            
             payload = jwt.decode(token, settings.SECRET_KEY)
         except jwt.exceptions.ExpiredSignatureError:
-            pdb.set_trace()
+            # pdb.set_trace()
             get_user = User.objects.filter(refresh_token=token).first()
             get_token = get_user.token
             payload = jwt.decode(get_token, settings.SECRET_KEY)
@@ -63,5 +63,4 @@ class JWTAuthentication(authentication.BaseAuthentication):
         # if not user.is_active:
         #     msg = 'This user has been deactivated.'
         #     raise exceptions.AuthenticationFailed(msg)
-
         return (user, token)

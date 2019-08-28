@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import User
+from .models import User, Story, StoryPage, StoryPageLocation
 from rest_framework.views import APIView
 from .serializers import UserSerializer, LoginSerializer
 import pdb
@@ -31,28 +31,29 @@ class LoginAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         return Response({'message': 'login successfully', 'user':serializer.data}, status=200)
 
-class UserRetrieveUpdateDestroyAPIView(APIView):
+class CreateStoryAPIView(APIView):
+    # Allow any user (authenticated or not) to hit this endpoint.
+
+    # permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        pdb.set_trace()
+        req_data = request.data
+        story = Story(name=req_data.get('name'))
+        story.save()
+        return Response({'message': 'story created successfully'}, status=201)
+
+class StoryRetrieveUpdateDestroyAPIView(APIView):
     
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     # serializer_class = UserSerializer
 
-    def get(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         """ Get specific user from the system. """
 
         try:
-            logged_in_user = request.user
-            user = User()
-            user_obj = User.objects.filter(id=logged_in_user.id).first()
-            if user_obj is None:
-                result = Response(
-                    {'message': 'not exits'}, status=400)
-            else:
-                data = {
-                    "first_name": user_obj.first_name,
-                    "last_name": user_obj.last_name,
-                    "email": user_obj.email,
-                }
-                result = Response(data, status=200)
+            story = Story()
+            result = Response(data, status=200)
         except ValidationError as e:
             result = Response({"message": e}, status=400)
 

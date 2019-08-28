@@ -77,15 +77,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         return token.decode('utf-8')
 
 
-    # def _generate_jwt_token(self):
-    #     """
-    #     Generates a JSON Web Token that stores this user's ID and has an expiry
-    #     date set to 60 days into the future.
-    #     """
-    #     # dt = datetime.now() + timedelta(days=60)
-    #     dt = datetime.now() + timedelta(minutes=2)
-    #     token = jwt.encode({
-    #         'id': self.id,
-    #         'exp': int(dt.strftime('%s'))
-    #     }, settings.SECRET_KEY, algorithm='HS256')
-    #     return token.decode('utf-8')
+class Story(models.Model):
+    name = models.CharField(max_length=30)
+
+class StoryPage(models.Model):
+    story = models.ForeignKey(Story,  related_name="inputs", on_delete=models.CASCADE)
+    page_name = models.CharField(max_length=30)
+
+
+class StoryPageLocation(models.Model):
+    StoryPage = models.ForeignKey(StoryPage,  related_name="inputs", on_delete=models.CASCADE)
+    page_name = models.CharField(max_length=30)

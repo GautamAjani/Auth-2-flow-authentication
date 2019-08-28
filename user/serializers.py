@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelField):
 
 
     def create(self, validated_data):
-        pdb.set_trace()
         return User.objects.create(**validated_data)
 
 
@@ -24,10 +23,8 @@ class LoginSerializer(serializers.Serializer):
 
 
     def validate(self, data):
-        pdb.set_trace()
         email = data.get('email', None)
         password = data.get('password', None)
-
         user_obj = User.objects.filter(email=email).first()
         user = authenticate(username=email, password=password)
         token  = user.token
